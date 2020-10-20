@@ -13,5 +13,8 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
+        semi: [2, "never"],
+        "no-unused-vars": "warn",
+        "no-undef": "off"
     }
-};
+}

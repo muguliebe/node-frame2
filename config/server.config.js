@@ -4,10 +4,11 @@ import path from 'path'
 import ConfigService from '../service/config.service';
 import readReadSync from 'recursive-readdir-sync'
 import chalk from 'chalk'
+import hbs from 'express-handlebars'
 
 export default class ServerConfig {
 
-    constructor({port, middlewares, controllerPath}) {
+    constructor({port, middlewares, controllerPath, apiPath}) {
 
         this.app = Express()
         this.app.set('env', ConfigService.NODE_ENV)
@@ -15,9 +16,11 @@ export default class ServerConfig {
 
         this.app.use(helmet())
         this.registerLogMiddleware()
+        this.setViewEngine()
 
         try {
             this.bindController(controllerPath)
+            this.bindController(apiPath)
         } catch (err) {
             throw new Error(`controller bind error occurred: ${err}`)
         }
@@ -43,6 +46,7 @@ export default class ServerConfig {
         const diff = process.hrtime(start)
         return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS
     }
+    app;
 
     logAdvice = (req, res, next) => {
         let method = req.method
@@ -55,7 +59,7 @@ export default class ServerConfig {
         const durationInMilliseconds = this.getActualRequestDurationInMilliseconds(start)
 
         let statusColor = chalk.green(status)
-        if(status !== 200) statusColor = chalk.red(status)
+        if (status !== 200) statusColor = chalk.red(status)
 
         let log = `${method} ${chalk.yellow(url)} ${statusColor} ${durationInMilliseconds.toLocaleString()} ms`
         logger.info(log)
@@ -93,6 +97,15 @@ export default class ServerConfig {
         } catch (error) {
             logger.error(`listen error: ${error.message}`)
         }
+    }
+
+    setViewEngine() {
+        this.app.engine('hbs', hbs({
+            defaultLayout: 'main',
+            extname: '.hbs'
+        }))
+
+        this.app.set('view engine', 'hbs')
     }
 
 }

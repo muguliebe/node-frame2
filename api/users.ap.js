@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {AsyncWrapper} from '../utils/asyncWrapper';
+import {AsyncWrapper} from '../utils/asyncWrapper'
 import axios from 'axios'
 
 // initialize
@@ -10,7 +10,7 @@ const router = Router()
  */
 export const initRouter = () => {
     const thisRouter = {
-        baseUrl: '/users',
+        baseUrl: '/api/users',
         router: router
     }
 
@@ -21,8 +21,8 @@ export const initRouter = () => {
 
 export const getUsers = async (req, res, next) => {
     logger.debug('test getUsers')
-    const result = await axios.get('https://api.github.com/users').data
-    console.dir(result)
+    const response = await axios.get('https://api.github.com/users')
+    const result = response.data
     res.json(result)
 }
 

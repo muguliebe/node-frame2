@@ -9,13 +9,13 @@ import winstonDaily from 'winston-daily-rotate-file'
 import 'date-utils'
 import chalk from 'chalk'
 
-const {combine, timestamp, printf} = winston.format;
+const {combine, timestamp, printf} = winston.format
 
 async function main() {
 
     // env init --------------------------------------------------------------------------------------------------------
     const env = ConfigService.NODE_ENV
-    if(env !== 'dev' && env !== 'prd')
+    if (env !== 'dev' && env !== 'prd')
         throw new Error('env must be dev or prd')
 
     // load env file ---------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ async function main() {
             }),
             printf(info => {
                 let logLevel = info.level.padEnd(5, ' ')
-                if(info.level === 'debug') {
+                if (info.level === 'debug') {
                     logLevel = chalk.gray(logLevel)
                 } else {
                     logLevel = chalk.yellow(logLevel)
@@ -72,7 +72,8 @@ async function main() {
 
     const server = new ServerConfig({
         port: process.env.PORT || 8000,
-        controllerPath: path.join(__dirname, './controllers')
+        controllerPath: path.join(__dirname, './controllers'),
+        apiPath: path.join(__dirname, './api')
     })
 
     await server.listen()
