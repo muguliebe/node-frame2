@@ -8,6 +8,7 @@ import winston from 'winston'
 import winstonDaily from 'winston-daily-rotate-file'
 import 'date-utils'
 import chalk from 'chalk'
+import allAdvice from "./middleware/allAdvice"
 
 const {combine, timestamp, printf} = winston.format
 
@@ -25,6 +26,17 @@ async function main() {
     for (const key in envConfig) {
         process.env[key] = envConfig[key]
     }
+
+    if (fs.existsSync(`./config/secure/config.${env}.env`)) {
+        const envSecureConfig = dotenv.parse(fs.readFileSync(`./config/secure/config.${env}.env`))
+        for (const key in envSecureConfig) {
+            process.env[key] = envSecureConfig[key]
+        }
+    } else {
+        process.env["isSecureEnv"] = false
+        console.error("there is no secure env => must have secure env file for DB Connect at ./config/secure/..")
+    }
+
 
     // logger 셋팅 ------------------------------------------------------------------------------------------------------
     mkdirp.sync(path.join(process.env.LOG_DIR))
@@ -73,7 +85,8 @@ async function main() {
     const server = new ServerConfig({
         port: process.env.PORT || 8000,
         controllerPath: path.join(__dirname, './controllers'),
-        apiPath: path.join(__dirname, './api')
+        apiPath: path.join(__dirname, './api'),
+        middlewares: [allAdvice]
     })
 
     await server.listen()

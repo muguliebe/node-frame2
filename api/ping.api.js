@@ -15,12 +15,13 @@ export const initRouter = () => {
         router: router
     }
 
-    router.get('/ping', AsyncWrapper(ping))
+    // router.get('/', AsyncWrapper(ping))
+    router.get('/', ping)
     return thisRouter
 }
 
-export const ping = async (req, res, next) => {
-    logger.debug(`here`)
+export const ping = async (req, res) => {
+    logger.debug(`gid: ${req['commons'].gid }`)
     const result = await service.ping()
     res.json(result)
 }

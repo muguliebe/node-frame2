@@ -3,8 +3,9 @@ import helmet from 'helmet'
 import path from 'path'
 import ConfigService from '../service/config.service';
 import readReadSync from 'recursive-readdir-sync'
-import chalk from 'chalk'
-import hbs from 'express-handlebars'
+import expHbs from 'express-handlebars'
+import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
 
 export default class ServerConfig {
 
@@ -13,10 +14,16 @@ export default class ServerConfig {
         this.app = Express()
         this.app.set('env', ConfigService.NODE_ENV)
         this.app.set('port', port)
+        this.app.use(bodyParser.urlencoded({extended: false}))
+        this.app.use(bodyParser.json())
 
         this.app.use(helmet())
-        this.registerLogMiddleware()
         this.setViewEngine()
+        this.setDb()
+
+        middlewares.forEach(middleware => {
+            this.registerMiddleware(middleware)
+        })
 
         try {
             this.bindController(controllerPath)
@@ -36,37 +43,8 @@ export default class ServerConfig {
     }
 
     registerMiddleware(middleware) {
-        this.app.use(middleware);
-        return this;
-    }
-
-    getActualRequestDurationInMilliseconds = start => {
-        const NS_PER_SEC = 1e9 // convert to nanoseconds
-        const NS_TO_MS = 1e6 // convert to milliseconds
-        const diff = process.hrtime(start)
-        return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS
-    }
-    app;
-
-    logAdvice = (req, res, next) => {
-        let method = req.method
-        let url = req.url
-        let status = res.statusCode
-        const start = process.hrtime()
-
-        next()
-
-        const durationInMilliseconds = this.getActualRequestDurationInMilliseconds(start)
-
-        let statusColor = chalk.green(status)
-        if (status !== 200) statusColor = chalk.red(status)
-
-        let log = `${method} ${chalk.yellow(url)} ${statusColor} ${durationInMilliseconds.toLocaleString()} ms`
-        logger.info(log)
-    };
-
-    registerLogMiddleware() {
-        return this.registerMiddleware(this.logAdvice)
+        this.app.use(middleware)
+        return this
     }
 
     bindController(controllerPath) {
@@ -89,10 +67,11 @@ export default class ServerConfig {
     async listen() {
         try {
             this.app.listen(this.port, () => {
-                logger.info('================================================================================')
+                logger.info('==========================================================================')
                 logger.info('environment       : ' + ConfigService.NODE_ENV)
                 logger.info(`Listening on port : ${this.port}`)
-                logger.info('================================================================================')
+                logger.info(`secure env check  : ${(!!process.env["isSecureEnv"])}`)
+                logger.info('==========================================================================')
             })
         } catch (error) {
             logger.error(`listen error: ${error.message}`)
@@ -100,12 +79,21 @@ export default class ServerConfig {
     }
 
     setViewEngine() {
-        this.app.engine('hbs', hbs({
+        const hbs = expHbs.create({
             defaultLayout: 'main',
-            extname: '.hbs'
-        }))
-
+            extname: '.hbs',
+            partialsDir: [path.join(__dirname, '../views/partials')]
+        })
+        this.app.engine('hbs', hbs.engine)
         this.app.set('view engine', 'hbs')
+        this.app.use(Express.static(path.join(__dirname, '../public')))
     }
 
+    setDb() {
+        mongoose.connect(process.env["MONGO_URL"], {useUnifiedTopology: true})
+        const db = mongoose.connection
+        db.once('open', () => {
+            logger.info('mongo connected')
+        })
+    }
 }
