@@ -92,4 +92,4 @@ async function main() {
     await server.listen()
 }
 
-main().then(r => logger.info('main started'))
+main().then(r => logger.info('main started.'))
