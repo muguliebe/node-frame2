@@ -15,8 +15,7 @@ export const initRouter = () => {
         router: router
     }
 
-    // router.get('/', AsyncWrapper(ping))
-    router.get('/', ping)
+    router.get('/', AsyncWrapper(ping))
     return thisRouter
 }
 

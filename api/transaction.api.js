@@ -20,7 +20,9 @@ export const initRouter = () => {
 
 export const getTrs = async (req, res) => {
     logger.debug('test getTrs')
-    const options = {sort: {day: -1}, limit: 10}
+    const options = Object.assign(
+        {sort: {day: -1}, limit: 10}
+        , req.query)
     const result = await Transaction.paginate({}, options)
     res.json(result)
 }

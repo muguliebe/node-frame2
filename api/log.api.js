@@ -15,8 +15,8 @@ export const initRouter = () => {
         router: router
     }
 
-    router.get('/', getLog)
-    router.post('/', postLog)
+    router.get('/', AsyncWrapper(getLog))
+    router.post('/', AsyncWrapper(postLog))
     return thisRouter
 }
 
@@ -36,7 +36,8 @@ export const postLog = async (req, res) => {
 }
 
 export const getLog = async (req, res) => {
-    const options = {sort: {day: -1, time: -1}, limit: 10}
+    const options = Object.assign({ sort: {day: -1, time: -1} , limit: 10 }, req.query)
+    logger.debug('options:' + options.toString())
     const result = await Log.paginate({}, options)
     res.json(result)
 }
