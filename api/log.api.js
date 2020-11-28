@@ -1,7 +1,6 @@
-import {Router} from 'express'
-import {AsyncWrapper} from '../utils/asyncWrapper'
+import { Router } from 'express'
+import { AsyncWrapper } from '../utils/asyncWrapper'
 import Log from '../models/Log.model'
-
 
 // initialize
 const router = Router()
@@ -12,7 +11,7 @@ const router = Router()
 export const initRouter = () => {
     const thisRouter = {
         baseUrl: '/api/log',
-        router: router
+        router: router,
     }
 
     router.get('/', AsyncWrapper(getLog))
@@ -36,7 +35,10 @@ export const postLog = async (req, res) => {
 }
 
 export const getLog = async (req, res) => {
-    const options = Object.assign({ sort: {day: -1, time: -1} , limit: 10 }, req.query)
+    const options = Object.assign(
+        { sort: { day: -1, time: -1 }, limit: 10 },
+        req.query
+    )
     logger.debug('options:' + options.toString())
     const result = await Log.paginate({}, options)
     res.json(result)

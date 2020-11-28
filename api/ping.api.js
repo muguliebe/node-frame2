@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import {AsyncWrapper} from '../utils/asyncWrapper'
+import { Router } from 'express'
+import { AsyncWrapper } from '../utils/asyncWrapper'
 import PingService from '../service/ping.service'
 
 // initialize
@@ -12,7 +12,7 @@ const service = new PingService()
 export const initRouter = () => {
     const thisRouter = {
         baseUrl: '/ping',
-        router: router
+        router: router,
     }
 
     router.get('/', AsyncWrapper(ping))
@@ -20,7 +20,7 @@ export const initRouter = () => {
 }
 
 export const ping = async (req, res) => {
-    logger.debug(`gid: ${req['commons'].gid }`)
+    logger.debug(`gid: ${req['commons'].gid}`)
     const result = await service.ping()
     res.json(result)
 }

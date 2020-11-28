@@ -1,10 +1,12 @@
 ###
-GET http://localhost:3000/ping
+GET {{host}}/ping
 
 ###
-GET http://localhost:3000/api/users
+GET {{host}}/api/users
 
 ###
-GET http://localhost:3000/api/log?page=1
+GET {{host}}/api/log?page=1
 
 ###
+
+GET {{host}}/api/mock/events
