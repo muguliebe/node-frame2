@@ -6,4 +6,5 @@ module.exports = {
     tabWidth: 4,
     jsxSingleQuote: true,
     endOfLine: 'lf',
+    arrowParens: 'avoid',
 }
