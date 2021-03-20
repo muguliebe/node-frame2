@@ -10,3 +10,7 @@ GET {{host}}/api/log?page=1
 ###
 
 GET {{host}}/api/mock/events
+
+###
+
+GET {{host}}/ping/ip

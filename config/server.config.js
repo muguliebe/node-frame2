@@ -7,9 +7,10 @@ import expHbs from 'express-handlebars'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+import cron from 'node-cron'
 
 export default class ServerConfig {
-    constructor({ port, middlewares, controllerPath, apiPath }) {
+    constructor({ port, middlewares, controllerPath, apiPath, batchPath }) {
         this.app = Express()
         this.app.use(cors())
         this.app.set('env', ConfigService.NODE_ENV)
@@ -28,6 +29,7 @@ export default class ServerConfig {
         try {
             this.bindController(controllerPath)
             this.bindController(apiPath)
+            this.bindBatch(batchPath)
         } catch (err) {
             throw new Error(`controller bind error occurred: ${err}`)
         }
@@ -57,6 +59,23 @@ export default class ServerConfig {
                     logger.info(`route bind: ${file}`)
                     const router = require(file).initRouter()
                     this.app.use(router.baseUrl, router.router)
+                } catch (err) {
+                    throw new Error(`${file}:${err}`)
+                }
+            })
+    }
+
+    bindBatch(batchPath) {
+        const controllers = path.join(batchPath)
+        logger.info(`batch bind start at ${batchPath}`)
+
+        readReadSync(controllers)
+            .filter(file => file.split('.').pop() === 'js')
+            .forEach(file => {
+                try{
+                    logger.info(`batch bind: ${file}`)
+                    const batch = require(file).initBatch()
+                    cron.schedule(batch.schedule, batch.task)
                 } catch (err) {
                     throw new Error(`${file}:${err}`)
                 }
