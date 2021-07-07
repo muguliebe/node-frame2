@@ -8,6 +8,7 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import cron from 'node-cron'
+import schedule from 'node-schedule'
 
 export default class ServerConfig {
     constructor({ port, middlewares, controllerPath, apiPath, batchPath }) {
@@ -72,10 +73,11 @@ export default class ServerConfig {
         readReadSync(controllers)
             .filter(file => file.split('.').pop() === 'js')
             .forEach(file => {
-                try{
+                try {
                     logger.info(`batch bind: ${file}`)
                     const batch = require(file).initBatch()
-                    cron.schedule(batch.schedule, batch.task)
+                    // cron.schedule(batch.schedule, batch.task)
+                    schedule.scheduleJob(batch.schedule, batch.task)
                 } catch (err) {
                     throw new Error(`${file}:${err}`)
                 }

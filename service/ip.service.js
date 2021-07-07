@@ -4,7 +4,7 @@ export default class IpService {
     constructor() {}
 
     async getIp() {
-        const ip = await axios.get('https://ifconfig.me')
+        const ip = await axios.get('http://ifconfig.me')
         return ip.data
     }
 }
