@@ -11,6 +11,7 @@ export const initBatch = () => {
     return {
         schedule: '*/10 * * * *',
         task: task,
+        isUse: false,
     }
 }
 

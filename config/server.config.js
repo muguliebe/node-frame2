@@ -77,7 +77,9 @@ export default class ServerConfig {
                     logger.info(`batch bind: ${file}`)
                     const batch = require(file).initBatch()
                     // cron.schedule(batch.schedule, batch.task)
-                    schedule.scheduleJob(batch.schedule, batch.task)
+                    if (batch.isUse !== false) {
+                        schedule.scheduleJob(batch.schedule, batch.task)
+                    }
                 } catch (err) {
                     throw new Error(`${file}:${err}`)
                 }

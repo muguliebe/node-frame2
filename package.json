@@ -24,6 +24,7 @@
     "chalk": "^4.1.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
+    "date-and-time": "^1.0.1",
     "date-utils": "^1.2.21",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
@@ -43,6 +44,7 @@
     "node-schedule": "^2.0.0",
     "pm2": "^4.4.1",
     "recursive-readdir-sync": "^1.0.6",
+    "sleep-promise": "^9.1.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
   },

@@ -9,6 +9,7 @@ import winstonDaily from 'winston-daily-rotate-file'
 import 'date-utils'
 import chalk from 'chalk'
 import allAdvice from './middleware/allAdvice'
+import PostUpService from './service/postup.service'
 
 const { combine, timestamp, printf } = winston.format
 
@@ -49,7 +50,7 @@ async function main() {
     global.logger = new winston.createLogger({
         format: combine(
             timestamp({
-                format: 'YYMMDD:HH:mm:ss.SSS',
+                format: 'YYMMDD:HHmmss.SSS',
             }),
             printf(info => {
                 let logLevel = info.level.padEnd(5, ' ')
@@ -99,4 +100,8 @@ async function main() {
     await server.listen()
 }
 
-main().then(r => logger.info('main started'))
+main().then(async () => {
+    logger.info('main started')
+    const servicePostUp = new PostUpService()
+    await servicePostUp.postUp()
+})

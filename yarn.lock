@@ -1757,6 +1757,11 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
+"date-and-time@^1.0.1":
+  "integrity" "sha512-7u+uNfnjWkX+YFQfivvW24TjaJG6ahvTrfw1auq7KlC7osuGcZBIWGBvB9UcENjH6JnLVhMqlRripk1dSHjAUA=="
+  "resolved" "https://registry.npmjs.org/date-and-time/-/date-and-time-1.0.1.tgz"
+  "version" "1.0.1"
+
 "date-utils@^1.2.21":
   "integrity" "sha1-YfsWzcEnSzyayq/+n8ad+HIKK2Q="
   "resolved" "https://registry.npmjs.org/date-utils/-/date-utils-1.2.21.tgz"
@@ -6000,6 +6005,11 @@
   "integrity" "sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q=="
   "resolved" "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   "version" "3.0.0"
+
+"sleep-promise@^9.1.0":
+  "integrity" "sha512-UHYzVpz9Xn8b+jikYSD6bqvf754xL2uBUzDFwiU6NcdZeifPr6UfgU43xpkPu67VMS88+TI2PSI7Eohgqf2fKA=="
+  "resolved" "https://registry.npmjs.org/sleep-promise/-/sleep-promise-9.1.0.tgz"
+  "version" "9.1.0"
 
 "slice-ansi@^2.1.0":
   "integrity" "sha512-Qu+VC3EwYLldKa1fCxuuvULvSJOKEgk9pi8dZeCVK7TqBfUNTH4sFkk4joj8afVSfAYgJoSOetjx9QWOJ5mYoQ=="
