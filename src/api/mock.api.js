@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { AsyncWrapper } from '../utils/asyncWrapper'
-import Event from '../models/Event.model'
+import Event from '../models/mongo/Event.model'
 
 // initialize
 const router = Router()

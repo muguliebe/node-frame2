@@ -8,6 +8,7 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import schedule from 'node-schedule'
+import { Sequelize } from 'sequelize'
 
 export default class ServerConfig {
     constructor({ port, middlewares, controllerPath, apiPath, batchPath }) {
@@ -20,7 +21,8 @@ export default class ServerConfig {
 
         this.app.use(helmet())
         this.setViewEngine()
-        this.setDb()
+        this.setMongo()
+        this.setPg()
 
         middlewares.forEach(middleware => {
             this.registerMiddleware(middleware)
@@ -112,11 +114,40 @@ export default class ServerConfig {
         this.app.use('/static', Express.static(path.join(__dirname, '../public')))
     }
 
-    setDb() {
+    setMongo() {
         mongoose.connect(process.env['MONGO_URL'], { useUnifiedTopology: true })
         const db = mongoose.connection
         db.once('open', () => {
             logger.info('mongo connected')
         })
+    }
+
+    setPg() {
+        const host = process.env['PG_HOST']
+        const port = process.env['PG_PORT']
+        const db = process.env['PG_DB']
+        const user = process.env['PG_USER']
+        const pass = process.env['PG_PASS']
+
+        const sequelize = new Sequelize(db, user, pass, {
+            host: host,
+            port: port,
+            dialect: 'postgres',
+            logging: logger.debug.bind(logger),
+            pool: {
+                max: 10,
+                min: 0,
+                idle: 10000,
+            },
+        })
+
+        sequelize
+            .authenticate()
+            .then(() => {
+                logger.info('pg connected')
+            })
+            .catch(err => {
+                logger.error('postgres connect failed..' + err)
+            })
     }
 }

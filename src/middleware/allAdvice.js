@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import Transaction from '../models/Transaction.model'
+import Transaction from '../models/mongo/Transaction.model'
 import { Address6 } from 'ip-address'
 import { v4 as uuidv4 } from 'uuid'
 import CommonArea from '../models/entity/CommonArea.entity'

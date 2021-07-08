@@ -13,7 +13,6 @@
   },
   "scripts": {
     "dev": "NODE_ENV=dev node -r esm .",
-    "dev:watch": "nodemon",
     "dw": "nodemon",
     "start:dev": "NODE_ENV=dev node -r esm .",
     "start:prd": "NODE_ENV=prd node -r esm .",
@@ -42,8 +41,11 @@
     "node-cron": "^3.0.0",
     "node-sass-middleware": "0.11.0",
     "node-schedule": "^2.0.0",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
     "pm2": "^4.4.1",
     "recursive-readdir-sync": "^1.0.6",
+    "sequelize": "^6.6.5",
     "sleep-promise": "^9.1.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"

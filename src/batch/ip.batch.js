@@ -1,5 +1,5 @@
 import IpService from '../service/ip.service'
-import IpModel from '../models/Ip.model'
+import IpModel from '../models/mongo/Ip.model'
 
 // initialize
 const serviceIp = new IpService()
