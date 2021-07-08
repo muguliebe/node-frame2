@@ -1,14 +1,13 @@
 import chalk from 'chalk'
 import Transaction from '../models/Transaction.model'
-import {Address6} from 'ip-address'
-import {v4 as uuidv4} from 'uuid'
-import CommonArea from "../models/entity/CommonArea.entity"
+import { Address6 } from 'ip-address'
+import { v4 as uuidv4 } from 'uuid'
+import CommonArea from '../models/entity/CommonArea.entity'
 import os from 'os'
 
 let osHostname = os.hostname()
 
-
-const getActualRequestDurationInMilliseconds = (start) => {
+const getActualRequestDurationInMilliseconds = start => {
     const NS_PER_SEC = 1e9 // convert to nanoseconds
     const NS_TO_MS = 1e6 // convert to milliseconds
     const diff = process.hrtime(start)
@@ -16,7 +15,6 @@ const getActualRequestDurationInMilliseconds = (start) => {
 }
 
 const allAdvice = (req, res, next) => {
-
     // init ============================================================================================================
     let ip = new Address6(req.ip).inspectTeredo().client4
     if (!ip) {
@@ -41,7 +39,7 @@ const allAdvice = (req, res, next) => {
 
     // after ===========================================================================================================
     let end = res.end
-    res.end = function() {
+    res.end = function () {
         end.apply(res, arguments)
         const durationInMilliseconds = getActualRequestDurationInMilliseconds(start)
 
@@ -59,7 +57,8 @@ const allAdvice = (req, res, next) => {
             sizeReadable = parseInt(size / 1024 / 1024) + ' MB'
         }
 
-        let log = `End      [to   ${ip}] ${method} ${chalk.yellow(url.substr(0, 40))} ${statusColor}` +
+        let log =
+            `End      [to   ${ip}] ${method} ${chalk.yellow(url.substr(0, 40))} ${statusColor}` +
             ` [${durationInMilliseconds.toLocaleString()} ms] [deliver ${sizeReadable}]`
 
         logger.info(log)
@@ -81,7 +80,6 @@ const allAdvice = (req, res, next) => {
     }
 
     next()
-
 }
 
 export default allAdvice

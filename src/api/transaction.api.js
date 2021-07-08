@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import {AsyncWrapper} from '../utils/asyncWrapper'
+import { Router } from 'express'
+import { AsyncWrapper } from '../utils/asyncWrapper'
 import Transaction from '../models/Transaction.model'
 
 // initialize
@@ -11,7 +11,7 @@ const router = Router()
 export const initRouter = () => {
     const thisRouter = {
         baseUrl: '/api/trs',
-        router: router
+        router: router,
     }
 
     router.get('/', AsyncWrapper(getTrs))
@@ -20,10 +20,7 @@ export const initRouter = () => {
 
 export const getTrs = async (req, res) => {
     logger.debug('test getTrs')
-    const options = Object.assign(
-        {sort: {day: -1}, limit: 10}
-        , req.query)
+    const options = Object.assign({ sort: { day: -1 }, limit: 10 }, req.query)
     const result = await Transaction.paginate({}, options)
     res.json(result)
 }
-

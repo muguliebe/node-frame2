@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import {AsyncWrapper} from '../utils/asyncWrapper'
+import { Router } from 'express'
+import { AsyncWrapper } from '../utils/asyncWrapper'
 
 // initialize
 const router = Router()
@@ -10,7 +10,7 @@ const router = Router()
 export const initRouter = () => {
     const thisRouter = {
         baseUrl: '/',
-        router: router
+        router: router,
     }
 
     router.get('/', AsyncWrapper(home))
@@ -19,6 +19,6 @@ export const initRouter = () => {
 
 export const home = async (req, res, next) => {
     res.render('index', {
-        title: 'home'
+        title: 'home',
     })
 }

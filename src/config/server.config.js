@@ -7,7 +7,6 @@ import expHbs from 'express-handlebars'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import cron from 'node-cron'
 import schedule from 'node-schedule'
 
 export default class ServerConfig {
@@ -89,17 +88,11 @@ export default class ServerConfig {
     async listen() {
         try {
             this.app.listen(this.port, () => {
-                logger.info(
-                    '=========================================================================='
-                )
+                logger.info('==========================================================================')
                 logger.info('environment       : ' + ConfigService.NODE_ENV)
                 logger.info(`Listening on port : ${this.port}`)
-                logger.info(
-                    `secure env check  : ${!!process.env['isSecureEnv']}`
-                )
-                logger.info(
-                    '=========================================================================='
-                )
+                logger.info(`secure env check  : ${!!process.env['isSecureEnv']}`)
+                logger.info('==========================================================================')
             })
         } catch (error) {
             logger.error(`listen error: ${error.message}`)
@@ -114,11 +107,9 @@ export default class ServerConfig {
         })
         this.app.engine('hbs', hbs.engine)
         this.app.set('view engine', 'hbs')
+        this.app.set('views', path.join(__dirname, '../public/views'))
         this.app.use(Express.static(path.join(__dirname, '../public')))
-        this.app.use(
-            '/static',
-            Express.static(path.join(__dirname, '../public'))
-        )
+        this.app.use('/static', Express.static(path.join(__dirname, '../public')))
     }
 
     setDb() {

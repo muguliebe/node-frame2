@@ -19,10 +19,7 @@ export const initRouter = () => {
 }
 
 export const getLog = async (req, res) => {
-    const options = Object.assign(
-        { sort: { id: -1, time: -1 }, limit: 10 },
-        req.query
-    )
+    const options = Object.assign({ sort: { id: -1, time: -1 }, limit: 10 }, req.query)
     const result = await Event.paginate({}, options)
     res.json(result)
 }

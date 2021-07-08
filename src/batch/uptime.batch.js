@@ -17,8 +17,7 @@ export const task = async () => {
     const after = new Date(delta)
     let afterTime = date.format(after, 'HH:mm:ss', true)
 
-    if (delta / 86400000 >= 1)
-        afterTime = Math.floor(delta / 86400000) + ' days ' + afterTime
+    if (delta / 86400000 >= 1) afterTime = Math.floor(delta / 86400000) + ' days ' + afterTime
 
     logger.info('after ' + afterTime)
 }
