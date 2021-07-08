@@ -1,0 +1,20 @@
+###
+GET {{host}}/ping
+
+###
+GET {{host}}/api/users
+
+###
+GET {{host}}/api/log?page=1
+
+###
+
+GET {{host}}/api/mock/events
+
+###
+
+GET {{host}}/ping/ip
+
+###
+
+GET {{host}}/users
