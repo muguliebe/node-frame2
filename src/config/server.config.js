@@ -101,9 +101,10 @@ export default class ServerConfig {
         try {
             this.app.listen(this.port, () => {
                 logger.info('==========================================================================')
-                logger.info('environment       : ' + ConfigService.NODE_ENV)
-                logger.info(`Listening on port : ${this.port}`)
-                logger.info(`secure env check  : ${!!process.env['isSecureEnv']}`)
+                logger.info('environment           : ' + ConfigService.NODE_ENV)
+                logger.info(`Listening on port     : ${this.port}`)
+                logger.info(`secure default check  : ${!!process.env['isSecureDefault']}`)
+                logger.info(`secure env check      : ${!!process.env['isSecureEnv']}`)
                 logger.info('==========================================================================')
             })
         } catch (error) {

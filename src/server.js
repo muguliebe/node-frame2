@@ -16,35 +16,40 @@ const { combine, timestamp, printf } = winston.format
 async function main() {
     // env init --------------------------------------------------------------------------------------------------------
     const env = ConfigService.NODE_ENV
-    if (env !== 'dev' && env !== 'prd')
-        throw new Error('env must be dev or prd')
+    if (env !== 'dev' && env !== 'prd') throw new Error('env must be dev or prd')
 
     // load env file ---------------------------------------------------------------------------------------------------
     // default 로드 => 환경별 env 파일 로드 후 덮어씌우기
     dotenv.config({ path: path.join(__dirname, `./config/config.default.env`) })
-    const envConfig = dotenv.parse(
-        fs.readFileSync(path.join(__dirname, `./config/config.${env}.env`))
-    )
+    const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, `./config/config.${env}.env`)))
     for (const key in envConfig) {
         process.env[key] = envConfig[key]
     }
 
-    if (
-        fs.existsSync(path.join(__dirname, `./config/secure/config.${env}.env`))
-    ) {
-        const envSecureConfig = dotenv.parse(
-            fs.readFileSync(
-                path.join(__dirname, `./config/secure/config.${env}.env`)
-            )
-        )
+    // secure config default file
+    const pathSecureDefault = path.join(__dirname, `./config/secure/config.default.env`)
+    if (fs.existsSync(pathSecureDefault)) {
+        const envSecureConfig = dotenv.parse(fs.readFileSync(pathSecureDefault))
         for (const key in envSecureConfig) {
             process.env[key] = envSecureConfig[key]
         }
+        process.env['isSecureDefault'] = true
+    } else {
+        process.env['isSecureDefault'] = false
+        console.error('there is no secure default => must have secure env file for DB Connect at ./config/secure/..')
+    }
+
+    // secure config env file
+    const pathSecure = path.join(__dirname, `./config/secure/config.${env}.env`)
+    if (fs.existsSync(pathSecure)) {
+        const envSecureConfig = dotenv.parse(fs.readFileSync(pathSecure))
+        for (const key in envSecureConfig) {
+            process.env[key] = envSecureConfig[key]
+        }
+        process.env['isSecureEnv'] = true
     } else {
         process.env['isSecureEnv'] = false
-        console.error(
-            'there is no secure env => must have secure env file for DB Connect at ./config/secure/..'
-        )
+        console.error('there is no secure env => must have secure env file for DB Connect at ./config/secure/..')
     }
 
     // logger 셋팅 ------------------------------------------------------------------------------------------------------
@@ -63,9 +68,7 @@ async function main() {
                 } else {
                     logLevel = chalk.yellow(logLevel)
                 }
-                return `[${chalk.cyan(info.timestamp)}:${logLevel}] ${
-                    info.message
-                }`
+                return `[${chalk.cyan(info.timestamp)}:${logLevel}] ${info.message}`
             })
         ),
         transports: [

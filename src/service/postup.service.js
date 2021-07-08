@@ -5,7 +5,5 @@ export default class PostUpService {
 
     async postUp() {
         logger.info('Check TimeZone: ' + DateUtils.checkTimeZone())
-        logger.info('locale        : ' + DateUtils.locale())
-        logger.info('uptime        : ' + DateUtils.uptime())
     }
 }
