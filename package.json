@@ -2,7 +2,7 @@
   "name": "node-frame",
   "version": "0.0.0",
   "private": true,
-  "main": "server.js",
+  "main": "src/server.js",
   "nodemonConfig": {
     "exec": "npm run dev",
     "ignore": [

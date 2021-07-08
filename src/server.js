@@ -21,17 +21,21 @@ async function main() {
 
     // load env file ---------------------------------------------------------------------------------------------------
     // default 로드 => 환경별 env 파일 로드 후 덮어씌우기
-    dotenv.config({ path: `./config/config.default.env` })
+    dotenv.config({ path: path.join(__dirname, `./config/config.default.env`) })
     const envConfig = dotenv.parse(
-        fs.readFileSync(`./config/config.${env}.env`)
+        fs.readFileSync(path.join(__dirname, `./config/config.${env}.env`))
     )
     for (const key in envConfig) {
         process.env[key] = envConfig[key]
     }
 
-    if (fs.existsSync(`./config/secure/config.${env}.env`)) {
+    if (
+        fs.existsSync(path.join(__dirname, `./config/secure/config.${env}.env`))
+    ) {
         const envSecureConfig = dotenv.parse(
-            fs.readFileSync(`./config/secure/config.${env}.env`)
+            fs.readFileSync(
+                path.join(__dirname, `./config/secure/config.${env}.env`)
+            )
         )
         for (const key in envSecureConfig) {
             process.env[key] = envSecureConfig[key]
