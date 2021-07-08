@@ -14,3 +14,7 @@ GET {{host}}/api/mock/events
 ###
 
 GET {{host}}/ping/ip
+
+###
+
+GET {{host}}/users

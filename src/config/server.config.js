@@ -149,5 +149,7 @@ export default class ServerConfig {
             .catch(err => {
                 logger.error('postgres connect failed..' + err)
             })
+
+        global.sequelize = sequelize
     }
 }
