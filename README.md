@@ -1,5 +1,7 @@
 # NODE init source
 
+express.js + mongo + postgresql
+
 ## settings
 ### 콘피그 파일에 몽고DB, POSTGRESQL value 를 셋팅
 ```shell

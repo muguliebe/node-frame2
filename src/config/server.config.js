@@ -35,6 +35,16 @@ export default class ServerConfig {
         } catch (err) {
             throw new Error(`controller bind error occurred: ${err}`)
         }
+
+        this.app.use((err, req, res, next) => {
+            res.status(500)
+            res.json({
+                error: {
+                    message: err.message,
+                    detail: err,
+                },
+            })
+        })
     }
 
     get port() {
