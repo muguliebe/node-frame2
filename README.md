@@ -18,3 +18,6 @@ PG_DB=
 ```shell
 sequelize-auto -o "./pg" -d {databaseName} -e postgres -h {host} -p 5432 -u {user} -x {password} 
 ```
+
+## ETC
+deploy test
