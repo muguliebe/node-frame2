@@ -1,5 +1,5 @@
 .idea/
 node_modules/
 log/
-config/secure/
+src/config/secure/
 
