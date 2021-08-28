@@ -26,4 +26,4 @@ sequelize-auto -o "src/model/pg" -d {databaseName} -e postgres -h {host} -p 5432
 ```
 
 ## ETC
-deploy test
+deploy test a
