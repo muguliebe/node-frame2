@@ -102,10 +102,13 @@ async function main() {
     })
 
     await server.listen()
+    return server
 }
 
-main().then(async () => {
+const app = main().then(async () => {
     logger.info('main started')
     const servicePostUp = new PostUpService()
     await servicePostUp.postUp()
 })
+
+module.exports = app

@@ -2,6 +2,8 @@
 node_modules/
 log/
 src/config/secure/
+coverage/
+
 
 
 

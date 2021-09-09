@@ -12,6 +12,7 @@
     ]
   },
   "scripts": {
+    "test": "NODE_ENV=dev jest",
     "dev": "NODE_ENV=dev node -r esm .",
     "dw": "nodemon",
     "start:dev": "NODE_ENV=dev node -r esm .",
@@ -51,6 +52,7 @@
     "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.15.4",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.8.1",
     "eslint-config-prettier": "^8.3.0",

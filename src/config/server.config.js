@@ -115,7 +115,7 @@ export default class ServerConfig {
     }
 
     setMongo() {
-        mongoose.connect(process.env['MONGO_URL'], { useUnifiedTopology: true })
+        mongoose.connect(process.env['MONGO_URL'], { useUnifiedTopology: false })
         const db = mongoose.connection
         db.once('open', () => {
             logger.info('mongo connected')
