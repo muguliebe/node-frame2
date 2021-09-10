@@ -3,10 +3,12 @@ import axios from 'axios'
 import dotenv from 'dotenv'
 import path from 'path'
 import fs from 'fs'
-import transactionIt from './transaction.api.unit'
 import * as instance from '../instance'
 import EventEmitter from 'events'
 import sleep from 'sleep-promise'
+import transactionIt from './transaction.api.unit'
+import logIt from './log.api.unit'
+import ipBatIt from './ip.batch.unit'
 
 
 describe('server test', () => {
@@ -35,6 +37,8 @@ describe('server test', () => {
     })
 
     transactionIt()
+    logIt()
+    ipBatIt()
 
     it('the end', async(done) => {
         done()

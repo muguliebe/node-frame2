@@ -81,9 +81,11 @@ export default class ServerConfig {
                 try {
                     logger.info(`batch bind: ${file}`)
                     const batch = require(file).initBatch()
-                    // cron.schedule(batch.schedule, batch.task)
                     if (batch.isUse !== false) {
                         schedule.scheduleJob(batch.schedule, batch.task)
+                    }
+                    if(batch.router){
+                        this.app.use(batch.baseUrl, batch.router)
                     }
                 } catch (err) {
                     throw new Error(`${file}:${err}`)
@@ -98,7 +100,7 @@ export default class ServerConfig {
                 logger.info('environment       : ' + ConfigService.NODE_ENV)
                 logger.info(`Listening on port : ${this.port}`)
                 logger.info(`secure env check  : ${!!process.env['isSecureEnv']}`)
-                logger.info(`uptime                : ${DateUtils.diffSeconds(DateUtils.getUptime())}`)
+                logger.info(`uptime            : ${DateUtils.diffSeconds(DateUtils.getUptime())}`)
                 logger.info('==========================================================================')
             })
             return this.app

@@ -9,6 +9,6 @@ export const getInstance = async () => {
 
     return axios.create({
         baseURL: `http://localhost:${env['PORT']}`,
-        timeout: 1000
+        timeout: 5000
     })
 }
