@@ -12,7 +12,8 @@
     ]
   },
   "scripts": {
-    "test": "NODE_ENV=dev jest",
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit --maxWorker=1",
+    "test:dw": "NODE_ENV=test jest --runInBand --detectOpenHandles --watch --forceExit --maxWorker=1",
     "dev": "NODE_ENV=dev node -r esm .",
     "dw": "nodemon",
     "start:dev": "NODE_ENV=dev node -r esm .",

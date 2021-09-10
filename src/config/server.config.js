@@ -8,33 +8,37 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import schedule from 'node-schedule'
-import { Sequelize } from 'sequelize'
+import {Sequelize} from 'sequelize'
+import DateUtils from '../utils/date.utils'
 
 export default class ServerConfig {
-    constructor({ port, middlewares, controllerPath, apiPath, batchPath }) {
-        this.app = Express()
-        this.app.use(cors())
-        this.app.set('env', ConfigService.NODE_ENV)
-        this.app.set('port', port)
-        this.app.use(bodyParser.urlencoded({ extended: false }))
-        this.app.use(bodyParser.json())
+    constructor({port, middlewares, controllerPath, apiPath, batchPath}) {
+        return (async () => {
+            this.app = Express()
+            this.app.use(cors())
+            this.app.set('env', ConfigService.NODE_ENV)
+            this.app.set('port', port)
+            this.app.use(bodyParser.urlencoded({extended: false}))
+            this.app.use(bodyParser.json())
 
-        this.app.use(helmet())
-        this.setViewEngine()
-        this.setMongo()
-        this.setPg()
+            this.app.use(helmet())
+            this.setViewEngine()
+            await this.setMongo()
+            await this.setPg()
 
-        middlewares.forEach(middleware => {
-            this.registerMiddleware(middleware)
-        })
+            middlewares.forEach(middleware => {
+                this.registerMiddleware(middleware)
+            })
 
-        try {
-            this.bindController(controllerPath)
-            this.bindController(apiPath)
-            this.bindBatch(batchPath)
-        } catch (err) {
-            throw new Error(`controller bind error occurred: ${err}`)
-        }
+            try {
+                this.bindController(controllerPath)
+                this.bindController(apiPath)
+                this.bindBatch(batchPath)
+            } catch (err) {
+                throw new Error(`controller bind error occurred: ${err}`)
+            }
+            return this
+        })()
     }
 
     get port() {
@@ -94,8 +98,10 @@ export default class ServerConfig {
                 logger.info('environment       : ' + ConfigService.NODE_ENV)
                 logger.info(`Listening on port : ${this.port}`)
                 logger.info(`secure env check  : ${!!process.env['isSecureEnv']}`)
+                logger.info(`uptime                : ${DateUtils.diffSeconds(DateUtils.getUptime())}`)
                 logger.info('==========================================================================')
             })
+            return this.app
         } catch (error) {
             logger.error(`listen error: ${error.message}`)
         }
@@ -114,15 +120,24 @@ export default class ServerConfig {
         this.app.use('/static', Express.static(path.join(__dirname, '../public')))
     }
 
-    setMongo() {
-        mongoose.connect(process.env['MONGO_URL'], { useUnifiedTopology: false })
-        const db = mongoose.connection
-        db.once('open', () => {
+    async setMongo() {
+        let option = {
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        }
+        if (process.env['NODE_ENV'] === 'test') {
+            option.useUnifiedTopology = false
+        }
+        try {
+            await mongoose.connect(process.env['MONGO_URL'], option)
             logger.info('mongo connected')
-        })
+        } catch (e) {
+            logger.error('mongo connect fail' + e)
+
+        }
     }
 
-    setPg() {
+    async setPg() {
         const host = process.env['PG_HOST']
         const port = process.env['PG_PORT']
         const db = process.env['PG_DB']
@@ -138,18 +153,21 @@ export default class ServerConfig {
                 max: 10,
                 min: 0,
                 idle: 10000,
+                acquire: 120000,
+                evict: 120000
             },
         })
 
-        sequelize
-            .authenticate()
-            .then(() => {
-                logger.info('pg connected')
-            })
-            .catch(err => {
-                logger.error('postgres connect failed..' + err)
-            })
+        try {
+            await sequelize.authenticate()
+            logger.info('pg connected')
+        } catch (e) {
+            logger.error('postgres connect failed..' + err)
+
+        }
 
         global.sequelize = sequelize
     }
 }
+
+module.exports = ServerConfig

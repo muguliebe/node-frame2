@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import ServerConfig from './config/server.config'
 import dotenv from 'dotenv'
 import path from 'path'
@@ -10,14 +11,17 @@ import 'date-utils'
 import chalk from 'chalk'
 import allAdvice from './middleware/allAdvice'
 import PostUpService from './service/postup.service'
+import EventEmitter from 'events'
 
 const { combine, timestamp, printf } = winston.format
+export const emitterPost = new EventEmitter()
 
-async function main() {
+export async function main() {
     // env init --------------------------------------------------------------------------------------------------------
     const env = ConfigService.NODE_ENV
-    if (env !== 'dev' && env !== 'prd')
+    if (env.match('dev|test|stg|stg-bat|prd|prd-bat') === false) {
         throw new Error('env must be dev or prd')
+    }
 
     // load env file ---------------------------------------------------------------------------------------------------
     // default 로드 => 환경별 env 파일 로드 후 덮어씌우기
@@ -93,7 +97,7 @@ async function main() {
 
     logger.debug('main start')
 
-    const server = new ServerConfig({
+    const server = await new ServerConfig({
         port: process.env.PORT || 8000,
         controllerPath: path.join(__dirname, './controllers'),
         apiPath: path.join(__dirname, './api'),
@@ -101,14 +105,21 @@ async function main() {
         middlewares: [allAdvice],
     })
 
-    await server.listen()
-    return server
+    const app = await server.listen()
+    emitterPost.emit('post')
+    logger.debug('main end')
+
+    return app
 }
 
-const app = main().then(async () => {
-    logger.info('main started')
+emitterPost.on('post', async () => {
+    logger.info('post event')
     const servicePostUp = new PostUpService()
     await servicePostUp.postUp()
 })
 
+const app = main()
+
 module.exports = app
+module.exports.app = app
+module.exports.emitterPost = emitterPost

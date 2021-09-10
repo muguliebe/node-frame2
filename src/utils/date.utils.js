@@ -14,4 +14,5 @@ export default class DateUtils {
     static locale = () => date.locale()
     static uptime = () => date.format(this.#uptime, 'YYYY-MM-DD HH:mm:ss')
     static getUptime = () => this.#uptime
+    static diffSeconds = (origin) => Math.abs((new Date().getTime() - origin.getTime()) / 1000 )
 }
