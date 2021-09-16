@@ -164,7 +164,7 @@ export default class ServerConfig {
             await sequelize.authenticate()
             logger.info('pg connected')
         } catch (e) {
-            logger.error('postgres connect failed..' + err)
+            logger.error('postgres connect failed..' + e)
 
         }
 
