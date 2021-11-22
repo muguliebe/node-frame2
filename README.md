@@ -1,4 +1,32 @@
 # NODE init source
+노드 boiler plate 소스
+
+## 소스구조
+```
+- bin                                       - executable
+|   └ sequelize-init.js                     |   └ DB table schema 땡겨오는 sequelize.js
+└ coverage                                  └ jest 테스트 수행 결과(소스 커버리지)가 담기는 폴더 
+└ src                                       └ 소스 Root
+|   └ api                                   |   └ /api/* 요청을 받는 핸들러    
+|   └ batch                                 |   └ 배치 소스
+|   └ config                                |   └ 설정 관련
+|   └ controllers                           |   └ /* 요청을 받는 핸들러 (뷰)
+|   └ middleware                            |   └ 미들웨어 (필터) 집합
+|   └ models                                |   └ DB 연결
+|       └ entity                            |   |  └ 미사용
+|       └ mongo                             |   |  └ MongoDB Scheme
+|       └ pg                                |   |  └ Postgres - sequelize 통해 generated 모델
+|       └ query                             |   |  └ Postgres query (수기)
+|   └ public                                |   └ static files
+|   └ views                                 |   └ view (hbs 사용중)
+|   └ service                               |   └ service of layer
+|                                           |   
+└ test                                      └ 테스트        
+   └ http                                   |   └ jetbrain 툴에서 돌아가는 .http 테스트 파일
+   └ jest                                   |   └ jest test framework 로 돌아가는 테스트 파일
+```
+
+
 
 ## settings
 ### 콘피그 파일에 몽고DB, POSTGRESQL value 를 셋팅
