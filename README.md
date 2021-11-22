@@ -26,8 +26,6 @@
    └ jest                                   |   └ jest test framework 로 돌아가는 테스트 파일
 ```
 
-
-
 ## settings
 ### 콘피그 파일에 몽고DB, POSTGRESQL value 를 셋팅
 ```shell
@@ -38,7 +36,7 @@ MONGO_URL=mongodb://user:password@url/database
 PG_HOST=localhost
 PG_PORT=5432
 PG_USER=test
-PG_PASS=tese
+PG_PASS=test
 PG_DB=test
 ```
 
@@ -49,9 +47,10 @@ CREATE TABLE "public".com_user_mst ( user_id serial NOT NULL , name varchar(100)
 
 ## postgresql 접근용 모델 생성 command
 ```shell
+node bin/sequelize-init.js
+or
 npm i -g pg
 sequelize-auto -o "src/model/pg" -d {databaseName} -e postgres -h {host} -p 5432 -u {user} -x {password} 
 ```
 
 ## ETC
-deploy test a
